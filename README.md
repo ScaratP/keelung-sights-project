@@ -4,11 +4,9 @@
 
 ## 📍 繳交網址資訊 (Submission URLs)
 
-> **注意：** 請替換以下括號 `[...]` 中的內容為你真實的網址。
-
-*   **GitHub Repo 網址：** `[請填入你的 GitHub Repo 網址]`
-*   **雲端公開網址 (前端頁面)：** `[請填入你的 Render / Railway 公開網址]`
-*   **FastAPI 文件網址：** `[請填入你的 Render / Railway 公開網址]/docs`
+*   **GitHub Repo 網址：** `https://github.com/ScaratP/keelung-sights-project`
+*   **雲端公開網址 (前端頁面)：** `https://keelung-sights-project-production.up.railway.app/`
+*   **FastAPI 文件網址：** `https://keelung-sights-project-production.up.railway.app/docs`
 
 ---
 
@@ -17,7 +15,7 @@
 *   `requirements.txt`：Python 套件依賴清單。
 *   `Dockerfile`：定義如何建置 Docker Image，並設定 `uvicorn` 綁定 `0.0.0.0` 與動態 `PORT`。
 *   `.dockerignore`：避免將不必要的檔案 (如 `.env`, `.git`) 打包進 Image。
-*   `.env.example`：環境變數範例檔，供本機端參考。
+*   `atlas-credentials.env`：環境變數範例檔，供本機端參考。
 *   `.gitignore`：排除敏感與暫存檔案，確保真實密碼不被提交至 GitHub。
 *   `README.md`：專案說明文件 (本檔案)。
 
@@ -31,10 +29,7 @@
     pip install -r requirements.txt
     ```
 2.  **環境變數設定：**
-    複製 `.env.example` 並重新命名為 `.env`。將你的 MongoDB Atlas 連線字串填入：
-    ```text
-    MONGODB_URI=mongodb+srv://<username>:<password>@cluster0...
-    ```
+    複製 `atlas-credentials.env` 並重新命名為 `.env`。將 MongoDB Atlas 連線字串填入
 3.  **初始化資料庫 (爬蟲播種)：**
     手動執行以下指令，透過 Service 層呼叫爬蟲，並寫入資料至 MongoDB：
     ```bash
@@ -56,17 +51,15 @@
     docker build -t keelung-sights .
     ```
 2.  **運行 Docker Container：**
-    容器啟動時已設定使用 `uvicorn` 並綁定 `0.0.0.0`。請透過 `-e` 傳入 MongoDB 連線字串：
+    容器啟動時已設定使用 `uvicorn` 並綁定 `0.0.0.0`。透過 `-e` 傳入 MongoDB 連線字串：
     ```bash
-    docker run -p 8000:8000 -e MONGODB_URI="你的真實連線字串" keelung-sights
+    docker run -p 8000:8000 -e MONGODB_URI="真實連線字串" keelung-sights
     ```
-    執行後，即可透過 `http://localhost:8000` 存取應用程式。
+    執行後即可透過 `http://localhost:8000` 查看網頁。
 
 ---
 
 ## ☁️ 雲端環境變數設定 (Cloud Environment Variables)
-
-在雲端平台 (Render / Railway) 部署時，**絕對不可**將真實的帳號密碼寫入程式碼或提交 `.env` 檔至 GitHub。請在雲端平台的設定介面新增以下環境變數：
 
 *   **`MONGODB_URI`**：請填寫 MongoDB Atlas 的真實連線字串。
     *(註：Atlas 的 Network Access 需允許對應的 IP 或設為 `0.0.0.0/0` 讓雲端平台順利連線)*
